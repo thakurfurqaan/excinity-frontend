@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import './App.css';
+import CandlestickChart, { Candle } from './components/CandlestickChart';
+
+
+const symbols = ['BTCUSDT', 'ETHUSDT', 'PEPEUSDT'];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
+  const [latestPrice, setLatestPrice] = useState<number | null>(null);
+  const [priceDirection, setPriceDirection] = useState<'up' | 'down' | null>(null);
+  const [candles, setCandles] = useState<Candle[]>([]);
+
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8080/ws');
+
+    ws.onmessage = (event) => {
+      const candle = JSON.parse(event.data);
+      console.log(candle);
+      if (candle.symbol.toLowerCase() === selectedSymbol.toLowerCase()) {
+        setCandles((prevCandles) => [...prevCandles, candle]);
+        setLatestPrice(candle.close);
+        setPriceDirection(prevPrice => prevPrice !== null && candle.close > prevPrice ? 'up' : 'down');
+      }
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [selectedSymbol]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="App">
+      <h1>Trading Chart</h1>
+      <select value={selectedSymbol} onChange={(e) => setSelectedSymbol(e.target.value)}>
+        {symbols.map((symbol) => (
+          <option key={symbol} value={symbol}>{symbol}</option>
+        ))}
+      </select>
+      <div className={`latest-price ${priceDirection}`}>
+        Latest Price: {latestPrice}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <CandlestickChart candles={candles} />
+    </div>
+  );
 }
 
-export default App
+export default App;
