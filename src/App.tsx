@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import CandlestickChart, { Candle } from './components/CandlestickChart';
+import CustomChart, { Candle } from './components/Chart';
 
 
 const symbols = ['BTCUSDT', 'ETHUSDT', 'PEPEUSDT'];
@@ -16,9 +16,16 @@ function App() {
 
     ws.onmessage = (event) => {
       const candle = JSON.parse(event.data);
-      console.log(candle);
       if (candle.symbol.toLowerCase() === selectedSymbol.toLowerCase()) {
-        setCandles((prevCandles) => [...prevCandles, candle]);
+        setCandles((prevCandles) => {
+          if (prevCandles.length === 0 || prevCandles[prevCandles.length - 1].timestamp !== candle.timestamp) {
+            return [...prevCandles, candle];
+          } else {
+            const newCandles = [...prevCandles];
+            newCandles[newCandles.length - 1] = candle;
+            return newCandles;
+          }
+        });
         setLatestPrice(candle.close);
         setPriceDirection(prevPrice => prevPrice !== null && candle.close > prevPrice ? 'up' : 'down');
       }
@@ -40,7 +47,7 @@ function App() {
       <div className={`latest-price ${priceDirection}`}>
         Latest Price: {latestPrice}
       </div>
-      <CandlestickChart candles={candles} />
+      <CustomChart candles={candles} />
     </div>
   );
 }
