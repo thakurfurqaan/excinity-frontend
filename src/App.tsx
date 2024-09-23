@@ -4,15 +4,15 @@ import CustomChart, { Candle } from './components/Chart';
 
 
 const symbols = ['BTCUSDT', 'ETHUSDT', 'PEPEUSDT'];
+const WEBSOCKET_URL = `${import.meta.env.VITE_PUBLIC_BACKEND_BASE_URL}/ws`
 
 function App() {
   const [selectedSymbol, setSelectedSymbol] = useState(symbols[0]);
-  const [latestPrice, setLatestPrice] = useState<number | null>(null);
   const [priceDirection, setPriceDirection] = useState<'up' | 'down' | null>(null);
   const [candles, setCandles] = useState<Candle[]>([]);
 
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8080/ws');
+    const ws = new WebSocket(WEBSOCKET_URL);
 
     ws.onmessage = (event) => {
       const candle = JSON.parse(event.data);
@@ -26,7 +26,6 @@ function App() {
             return newCandles;
           }
         });
-        setLatestPrice(candle.close);
         setPriceDirection(prevPrice => prevPrice !== null && candle.close > prevPrice ? 'up' : 'down');
       }
     };
@@ -45,9 +44,13 @@ function App() {
         ))}
       </select>
       <div className={`latest-price ${priceDirection}`}>
-        Latest Price: {latestPrice}
+        {candles.length > 0 && (
+          <h4>Latest Price:
+            &nbsp;<span style={{ color: candles[candles.length - 1]?.close > candles[candles.length - 2]?.close ? 'green' : 'red' }}>{candles[candles.length - 1]?.close}</span>
+          </h4>
+        )}
       </div>
-      <CustomChart candles={candles} />
+      <CustomChart candles={candles} title={selectedSymbol} />
     </div>
   );
 }
