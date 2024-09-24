@@ -23,12 +23,10 @@ const CustomChart: React.FC<Props> = ({ candles, title }: Props) => {
     const [chartType, setChartType] = useState<ChartType>(ChartType.CandlestickChart);
 
     return (
-        <>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', flexDirection: 'column' }}>
-                <ChartTypeSelector chartType={chartType} setChartType={setChartType} />
-                {chartType === ChartType.CandlestickChart ? <CustomCandlestickChart candles={candles} title={title} /> : <CustomLineChart candles={candles} title={title} />}
-            </div>
-        </>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', flexDirection: 'column' }}>
+            <ChartTypeSelector chartType={chartType} setChartType={setChartType} />
+            {chartType === ChartType.CandlestickChart ? <CustomCandlestickChart candles={candles} title={title} /> : <CustomLineChart candles={candles} title={title} />}
+        </div>
     );
 };
 
