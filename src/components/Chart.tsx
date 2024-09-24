@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LineChart from './charts/CustomLineChart';
 import CandlestickChart from './charts/CustomCandlestickChart';
+import { ChartType } from './charts/enum';
 
 export interface Candle {
     timestamp: string;
@@ -13,11 +14,6 @@ export interface Candle {
 interface Props {
     candles: Candle[];
     title: string;
-}
-
-export enum ChartType {
-    CandlestickChart = 'CandlestickChart',
-    LineChart = 'LineChart',
 }
 
 

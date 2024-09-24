@@ -30,6 +30,10 @@ function App() {
       }
     };
 
+    ws.onclose = () => {
+      setCandles([]);
+    };
+
     return () => {
       ws.close();
     };
