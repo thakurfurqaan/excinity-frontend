@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import CustomLineChart from './charts/CustomLineChart';
-import CandlestickChart from './charts/CustomCandlestickChart';
+import CustomCandlestickChart from './charts/CustomCandlestickChart';
 import { ChartType } from './charts/enum';
+import ChartTypeSelector from './ChartTypeSelector';
 
 export interface Candle {
     timestamp: string;
@@ -23,17 +24,9 @@ const CustomChart: React.FC<Props> = ({ candles, title }: Props) => {
 
     return (
         <>
-            <div>
-                <label htmlFor="chartType">Select Chart Type: </label>
-                <select
-                    id="chartType"
-                    value={chartType}
-                    onChange={(e) => setChartType(e.target.value as ChartType)}
-                >
-                    <option value={ChartType.CandlestickChart}>Candlestick Chart</option>
-                    <option value={ChartType.LineChart}>Line Chart</option>
-                </select>
-                {chartType === ChartType.CandlestickChart ? <CandlestickChart candles={candles} title={title} /> : <CustomLineChart candles={candles} title={title} />}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', flexDirection: 'column' }}>
+                <ChartTypeSelector chartType={chartType} setChartType={setChartType} />
+                {chartType === ChartType.CandlestickChart ? <CustomCandlestickChart candles={candles} title={title} /> : <CustomLineChart candles={candles} title={title} />}
             </div>
         </>
     );

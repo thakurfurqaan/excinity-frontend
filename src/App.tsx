@@ -13,9 +13,11 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Simple Trading System</h1>
-      <SymbolSelector symbols={SYMBOLS} selectedSymbol={selectedSymbol} onSelectSymbol={setSelectedSymbol} />
-      <LatestPrice candles={candles} priceDirection={priceDirection} />
+      <h1 style={{ textAlign: 'center', margin: '0' }}>Simple Trading System</h1>
+      <div className="header" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
+        <SymbolSelector symbols={SYMBOLS} selectedSymbol={selectedSymbol} onSelectSymbol={setSelectedSymbol} />
+        <LatestPrice candles={candles} priceDirection={priceDirection} />
+      </div>
       <CustomChart candles={candles} title={selectedSymbol} />
     </div>
   );
