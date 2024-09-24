@@ -12,7 +12,7 @@ function App() {
   const [candles, setCandles] = useState<Candle[]>([]);
 
   useEffect(() => {
-    const ws = new WebSocket(WEBSOCKET_URL);
+    const ws = new WebSocket(`${WEBSOCKET_URL}/${selectedSymbol}`);
 
     ws.onmessage = (event) => {
       const candle = JSON.parse(event.data);
