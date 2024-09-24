@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LineChart from './charts/CustomLineChart';
+import CustomLineChart from './charts/CustomLineChart';
 import CandlestickChart from './charts/CustomCandlestickChart';
 import { ChartType } from './charts/enum';
 
@@ -33,7 +33,7 @@ const CustomChart: React.FC<Props> = ({ candles, title }: Props) => {
                     <option value={ChartType.CandlestickChart}>Candlestick Chart</option>
                     <option value={ChartType.LineChart}>Line Chart</option>
                 </select>
-                {chartType === ChartType.CandlestickChart ? <CandlestickChart candles={candles} title={title} /> : <LineChart candles={candles} title={title} />}
+                {chartType === ChartType.CandlestickChart ? <CandlestickChart candles={candles} title={title} /> : <CustomLineChart candles={candles} title={title} />}
             </div>
         </>
     );

@@ -3,7 +3,7 @@ import { Candle } from '../Chart';
 
 const CustomLineChart = ({ candles, title }: { candles: Candle[], title: string }) => {
     return (
-        <div style={{ backgroundColor: 'white', borderRadius: '10px', boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.1)', padding: '10px' }}>
+        <div style={{ borderRadius: '10px', boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.1)', padding: '10px' }}>
             <h2>{title}</h2>
             <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={candles}>
